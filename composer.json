@@ -1,0 +1,12 @@
+{
+    "name": "gplcart/filter",
+    "type": "gplcart-module",
+    "description": "Provides advanced HTML filters based on the HTML Purifier library",
+    "keywords": ["gplcart", "ecommerce", "shopping cart", "gplcart module", "php", "htmlpurifier"],
+    "license": "GPL-3.0+",
+    "require": {
+        "gplcart/composer-module-installer": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
