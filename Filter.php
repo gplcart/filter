@@ -50,27 +50,6 @@ class Filter extends Module
     }
 
     /**
-     * Module info
-     * @return array
-     */
-    public function info()
-    {
-        return array(
-            'name' => 'Filter',
-            'version' => '1.0.0-dev',
-            'description' => 'Provides advanced HTML filters based on the HTML Purifier library',
-            'author' => 'Iurii Makukh ',
-            'core' => '1.x',
-            'license' => 'GPL-3.0+',
-            'configure' => 'admin/module/settings/filter',
-            'settings' => array(
-                'role_id' => array('minimal' => array(), 'advanced' => array(), 'maximal' => array()),
-                'status' => array('minimal' => false, 'advanced' => false, 'maximal' => false)
-            ),
-        );
-    }
-
-    /**
      * Implements hook "library.list"
      * @param array $libraries
      */
