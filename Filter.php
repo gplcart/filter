@@ -9,9 +9,7 @@
 
 namespace gplcart\modules\filter;
 
-use gplcart\core\Module,
-    gplcart\core\Library;
-use gplcart\core\models\Language as LanguageModel;
+use gplcart\core\Module;
 
 /**
  * Main class for Filter module
@@ -26,27 +24,11 @@ class Filter extends Module
     protected $htmlpurifiers = array();
 
     /**
-     * Library class instance
-     * @var \gplcart\core\Library $library
+     * Constructor
      */
-    protected $library;
-
-    /**
-     * Language model instance
-     * @var \gplcart\core\models\Language $language
-     */
-    protected $language;
-
-    /**
-     * @param Library $library
-     * @param LanguageModel $language
-     */
-    public function __construct(Library $library, LanguageModel $language)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->library = $library;
-        $this->language = $language;
     }
 
     /**
@@ -134,7 +116,7 @@ class Filter extends Module
             return $this->htmlpurifiers[$key];
         }
 
-        $this->library->load('htmlpurifier');
+        $this->getLibrary()->load('htmlpurifier');
 
         if (empty($filter['config'])) {
             $config = \HTMLPurifier_Config::createDefault();
@@ -153,9 +135,12 @@ class Filter extends Module
     {
         $settings = $this->config->module('filter');
 
+        /* @var $language \gplcart\core\models\Language */
+        $language - $this->getModel('Language');
+
         $filters['minimal'] = array(
-            'name' => $this->language->text('Minimal'),
-            'description' => $this->language->text('Minimal configuration for untrusted users'),
+            'name' => $language->text('Minimal'),
+            'description' => $language->text('Minimal configuration for untrusted users'),
             'status' => $settings['status']['minimal'],
             'role_id' => $settings['role_id']['minimal'],
             'config' => array(
@@ -167,8 +152,8 @@ class Filter extends Module
         );
 
         $filters['advanced'] = array(
-            'name' => $this->language->text('Advanced'),
-            'description' => $this->language->text('Advanced configuration for trusted users, e.g content managers'),
+            'name' => $language->text('Advanced'),
+            'description' => $language->text('Advanced configuration for trusted users, e.g content managers'),
             'status' => $settings['status']['advanced'],
             'role_id' => $settings['role_id']['advanced'],
             'config' => array(
@@ -192,8 +177,8 @@ class Filter extends Module
         );
 
         $filters['maximal'] = array(
-            'name' => $this->language->text('Maximal'),
-            'description' => $this->language->text('Maximal configuration for experienced and trusted users, e.g superadmin'),
+            'name' => $language->text('Maximal'),
+            'description' => $language->text('Maximal configuration for experienced and trusted users, e.g superadmin'),
             'status' => $settings['status']['maximal'],
             'role_id' => $settings['role_id']['maximal'],
             'config' => array(
@@ -222,7 +207,7 @@ class Filter extends Module
      */
     public function hookModuleEnableAfter()
     {
-        $this->library->clearCache();
+        $this->getLibrary()->clearCache();
     }
 
     /**
@@ -230,7 +215,7 @@ class Filter extends Module
      */
     public function hookModuleDisableAfter()
     {
-        $this->library->clearCache();
+        $this->getLibrary()->clearCache();
     }
 
     /**
@@ -238,7 +223,7 @@ class Filter extends Module
      */
     public function hookModuleInstallAfter()
     {
-        $this->library->clearCache();
+        $this->getLibrary()->clearCache();
     }
 
     /**
@@ -246,7 +231,7 @@ class Filter extends Module
      */
     public function hookModuleUninstallAfter()
     {
-        $this->library->clearCache();
+        $this->getLibrary()->clearCache();
     }
 
 }
