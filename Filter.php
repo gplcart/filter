@@ -135,8 +135,7 @@ class Filter extends Module
     {
         $settings = $this->config->module('filter');
 
-        /* @var $language \gplcart\core\models\Language */
-        $language - $this->getModel('Language');
+        $language - $this->getLanguage();
 
         $filters['minimal'] = array(
             'name' => $language->text('Minimal'),
