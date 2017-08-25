@@ -135,7 +135,7 @@ class Filter extends Module
     {
         $settings = $this->config->module('filter');
 
-        $language - $this->getLanguage();
+        $language = $this->getLanguage();
 
         $filters['minimal'] = array(
             'name' => $language->text('Minimal'),
