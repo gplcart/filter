@@ -80,7 +80,9 @@ class Filter extends Module
 
     /**
      * Implements hook "filter"
-     * @param mixed $data
+     * @param string $text
+     * @param string $filter
+     * @param null|string $filtered
      */
     public function hookFilter($text, $filter, &$filtered)
     {
@@ -146,7 +148,7 @@ class Filter extends Module
                 'AutoFormat.DisplayLinkURI' => true,
                 'AutoFormat.RemoveEmpty' => true,
                 'HTML.Allowed' => 'strong,em,p,b,s,i,a[href|title],img[src|alt],'
-                . 'blockquote,code,pre,del,ul,ol,li'
+                    . 'blockquote,code,pre,del,ul,ol,li'
             )
         );
 
@@ -161,12 +163,12 @@ class Filter extends Module
                 'AutoFormat.RemoveEmpty' => true,
                 'HTML.Nofollow' => true,
                 'HTML.Allowed' => 'div,table,tr,td,tbody,tfoot,thead,th,strong,'
-                . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
-                . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
-                . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
+                    . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
+                    . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
+                    . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
                 'CSS.AllowedProperties' => 'font,font-size,font-weight,font-style,'
-                . 'font-family,text-decoration,padding-left,color,'
-                . 'background-color,text-align',
+                    . 'font-family,text-decoration,padding-left,color,'
+                    . 'background-color,text-align',
                 'HTML.FlashAllowFullScreen' => true,
                 'HTML.SafeObject' => true,
                 'HTML.SafeEmbed' => true,
@@ -185,12 +187,12 @@ class Filter extends Module
                 'AutoFormat.RemoveEmpty.RemoveNbsp' => false,
                 'AutoFormat.RemoveEmpty' => true,
                 'HTML.Allowed' => 'div,table,tr,td,tbody,tfoot,thead,th,strong,'
-                . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
-                . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
-                . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
+                    . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
+                    . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
+                    . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
                 'CSS.AllowedProperties' => 'font,font-size,font-weight,font-style,'
-                . 'font-family,text-decoration,padding-left,color,'
-                . 'background-color,text-align',
+                    . 'font-family,text-decoration,padding-left,color,'
+                    . 'background-color,text-align',
                 'HTML.FlashAllowFullScreen' => true,
                 'HTML.SafeObject' => true,
                 'HTML.SafeEmbed' => true,
