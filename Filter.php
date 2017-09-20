@@ -38,8 +38,8 @@ class Filter extends Module
     public function hookLibraryList(array &$libraries)
     {
         $libraries['htmlpurifier'] = array(
-            'name' => 'HTML Purifier',
-            'description' => 'Standards compliant HTML filter written in PHP',
+            'name' => /* @text */'HTML Purifier',
+            'description' => /* @text */'Standards compliant HTML filter written in PHP',
             'type' => 'php',
             'module' => 'filter',
             'url' => 'https://github.com/ezyang/htmlpurifier',
@@ -75,7 +75,7 @@ class Filter extends Module
      */
     public function hookUserRolePermissions(array &$permissions)
     {
-        $permissions['module_filter_edit'] = 'HTML Filter: edit';
+        $permissions['module_filter_edit'] = /* @text */'HTML Filter: edit';
     }
 
     /**
@@ -140,7 +140,7 @@ class Filter extends Module
         $language = $this->getLanguage();
 
         $filters['minimal'] = array(
-            'name' => $language->text('Minimal'),
+            'name' => $language->text('Minimal configuration'),
             'description' => $language->text('Minimal configuration for untrusted users'),
             'status' => $settings['status']['minimal'],
             'role_id' => $settings['role_id']['minimal'],
@@ -148,12 +148,12 @@ class Filter extends Module
                 'AutoFormat.DisplayLinkURI' => true,
                 'AutoFormat.RemoveEmpty' => true,
                 'HTML.Allowed' => 'strong,em,p,b,s,i,a[href|title],img[src|alt],'
-                    . 'blockquote,code,pre,del,ul,ol,li'
+                . 'blockquote,code,pre,del,ul,ol,li'
             )
         );
 
         $filters['advanced'] = array(
-            'name' => $language->text('Advanced'),
+            'name' => $language->text('Advanced configuration'),
             'description' => $language->text('Advanced configuration for trusted users, e.g content managers'),
             'status' => $settings['status']['advanced'],
             'role_id' => $settings['role_id']['advanced'],
@@ -163,12 +163,12 @@ class Filter extends Module
                 'AutoFormat.RemoveEmpty' => true,
                 'HTML.Nofollow' => true,
                 'HTML.Allowed' => 'div,table,tr,td,tbody,tfoot,thead,th,strong,'
-                    . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
-                    . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
-                    . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
+                . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
+                . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
+                . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
                 'CSS.AllowedProperties' => 'font,font-size,font-weight,font-style,'
-                    . 'font-family,text-decoration,padding-left,color,'
-                    . 'background-color,text-align',
+                . 'font-family,text-decoration,padding-left,color,'
+                . 'background-color,text-align',
                 'HTML.FlashAllowFullScreen' => true,
                 'HTML.SafeObject' => true,
                 'HTML.SafeEmbed' => true,
@@ -178,7 +178,7 @@ class Filter extends Module
         );
 
         $filters['maximal'] = array(
-            'name' => $language->text('Maximal'),
+            'name' => $language->text('Maximal configuration'),
             'description' => $language->text('Maximal configuration for experienced and trusted users, e.g superadmin'),
             'status' => $settings['status']['maximal'],
             'role_id' => $settings['role_id']['maximal'],
@@ -187,12 +187,12 @@ class Filter extends Module
                 'AutoFormat.RemoveEmpty.RemoveNbsp' => false,
                 'AutoFormat.RemoveEmpty' => true,
                 'HTML.Allowed' => 'div,table,tr,td,tbody,tfoot,thead,th,strong,'
-                    . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
-                    . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
-                    . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
+                . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
+                . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
+                . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
                 'CSS.AllowedProperties' => 'font,font-size,font-weight,font-style,'
-                    . 'font-family,text-decoration,padding-left,color,'
-                    . 'background-color,text-align',
+                . 'font-family,text-decoration,padding-left,color,'
+                . 'background-color,text-align',
                 'HTML.FlashAllowFullScreen' => true,
                 'HTML.SafeObject' => true,
                 'HTML.SafeEmbed' => true,
