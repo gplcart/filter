@@ -5,17 +5,5 @@
     "author": "Iurii Makukh ",
     "core": "1.x",
     "license": "GPL-3.0+",
-    "configure": "admin/module/settings/filter",
-    "settings": {
-        "role_id": {
-            "minimal": [],
-            "advanced": [],
-            "maximal": []
-        },
-        "status": {
-            "minimal": false,
-            "advanced": false,
-            "maximal": false
-        }
-    }
+    "configure": "admin/module/settings/filter"
 }

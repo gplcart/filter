@@ -18,7 +18,7 @@ class Filter extends Module
 {
 
     /**
-     * An array of HTML Purifier instances keyed by filter config hash
+     * An array of HTML Purifier instances keyed by filter configuration hash
      * @var array
      */
     protected $htmlpurifiers = array();
@@ -64,7 +64,14 @@ class Filter extends Module
         $routes['admin/module/settings/filter'] = array(
             'access' => 'module_edit',
             'handlers' => array(
-                'controller' => array('gplcart\\modules\\filter\\controllers\\Settings', 'editSettings')
+                'controller' => array('gplcart\\modules\\filter\\controllers\\Filter', 'listFilter')
+            )
+        );
+
+        $routes['admin/module/settings/filter/edit/(\w+)'] = array(
+            'access' => 'module_filter_edit',
+            'handlers' => array(
+                'controller' => array('gplcart\\modules\\filter\\controllers\\Filter', 'editFilter')
             )
         );
     }
@@ -76,17 +83,20 @@ class Filter extends Module
     public function hookUserRolePermissions(array &$permissions)
     {
         $permissions['module_filter_edit'] = /* @text */'HTML Filter: edit';
+        $permissions['module_filter_delete'] = /* @text */'HTML Filter: delete';
     }
 
     /**
      * Implements hook "filter"
      * @param string $text
-     * @param string $filter
+     * @param array $filter
      * @param null|string $filtered
      */
     public function hookFilter($text, $filter, &$filtered)
     {
-        $filtered = $this->filter($text, $filter);
+        if (isset($filter['module']) && $filter['module'] === 'filter' && !empty($filter['status'])) {
+            $filtered = $this->filter($text, $filter);
+        }
     }
 
     /**
@@ -97,22 +107,18 @@ class Filter extends Module
      */
     public function filter($text, $filter)
     {
-        if (empty($filter['config']) || empty($filter['status'])) {
-            $filter['config'] = array(); // Empty config enables most safest default filter
-        }
-
         return $this->getHtmlpurifierInstance($filter)->purify($text);
     }
 
     /**
-     * Returns HTML Purifier class instance depending on the filter config
+     * Returns HTML Purifier class instance depending on the filter configuration
      * @param array $filter
      * @return \HTMLPurifier
      */
     public function getHtmlpurifierInstance(array $filter)
     {
-        ksort($filter['config']);
-        $key = md5(json_encode($filter['config']));
+        ksort($filter['data']);
+        $key = md5(json_encode($filter['data']));
 
         if (isset($this->htmlpurifiers[$key])) {
             return $this->htmlpurifiers[$key];
@@ -120,87 +126,38 @@ class Filter extends Module
 
         $this->getLibrary()->load('htmlpurifier');
 
-        if (empty($filter['config'])) {
+        if (empty($filter['data'])) {
             $config = \HTMLPurifier_Config::createDefault();
         } else {
-            $config = \HTMLPurifier_Config::create($filter['config']);
+            $config = \HTMLPurifier_Config::create($filter['data']);
         }
 
         return $this->htmlpurifiers[$key] = new \HTMLPurifier($config);
     }
 
     /**
-     * Implements hook "filter.list"
+     * Implements hook "filter.handlers"
      * @param mixed $filters
      */
-    public function hookFilterList(array &$filters)
+    public function hookFilterHandlers(array &$filters)
     {
-        $settings = $this->config->module('filter');
+        $filters = array_merge($filters, $this->getFilterHandlers());
+    }
 
-        $language = $this->getLanguage();
+    /**
+     * Returns an array of filter handlers
+     * @return array
+     */
+    protected function getFilterHandlers()
+    {
+        static $filters = null;
 
-        $filters['minimal'] = array(
-            'name' => $language->text('Minimal configuration'),
-            'description' => $language->text('Minimal configuration for untrusted users'),
-            'status' => $settings['status']['minimal'],
-            'role_id' => $settings['role_id']['minimal'],
-            'config' => array(
-                'AutoFormat.DisplayLinkURI' => true,
-                'AutoFormat.RemoveEmpty' => true,
-                'HTML.Allowed' => 'strong,em,p,b,s,i,a[href|title],img[src|alt],'
-                . 'blockquote,code,pre,del,ul,ol,li'
-            )
-        );
+        if (!isset($filters)) {
+            $filters = require __DIR__ . '/config/filters.php';
+        }
 
-        $filters['advanced'] = array(
-            'name' => $language->text('Advanced configuration'),
-            'description' => $language->text('Advanced configuration for trusted users, e.g content managers'),
-            'status' => $settings['status']['advanced'],
-            'role_id' => $settings['role_id']['advanced'],
-            'config' => array(
-                'AutoFormat.Linkify' => true,
-                'AutoFormat.RemoveEmpty.RemoveNbsp' => true,
-                'AutoFormat.RemoveEmpty' => true,
-                'HTML.Nofollow' => true,
-                'HTML.Allowed' => 'div,table,tr,td,tbody,tfoot,thead,th,strong,'
-                . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
-                . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
-                . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
-                'CSS.AllowedProperties' => 'font,font-size,font-weight,font-style,'
-                . 'font-family,text-decoration,padding-left,color,'
-                . 'background-color,text-align',
-                'HTML.FlashAllowFullScreen' => true,
-                'HTML.SafeObject' => true,
-                'HTML.SafeEmbed' => true,
-                'HTML.Trusted' => true,
-                'Output.FlashCompat' => true
-            )
-        );
-
-        $filters['maximal'] = array(
-            'name' => $language->text('Maximal configuration'),
-            'description' => $language->text('Maximal configuration for experienced and trusted users, e.g superadmin'),
-            'status' => $settings['status']['maximal'],
-            'role_id' => $settings['role_id']['maximal'],
-            'config' => array(
-                'AutoFormat.Linkify' => true,
-                'AutoFormat.RemoveEmpty.RemoveNbsp' => false,
-                'AutoFormat.RemoveEmpty' => true,
-                'HTML.Allowed' => 'div,table,tr,td,tbody,tfoot,thead,th,strong,'
-                . 'em,p[style],b,s,i,h2,h3,h4,h5,hr,br,span[style],a[href|title],'
-                . 'img[width|height|alt|src],blockquote,code,pre,del,kbd,'
-                . 'cite,dt,dl,dd,sup,sub,ul,ol,li',
-                'CSS.AllowedProperties' => 'font,font-size,font-weight,font-style,'
-                . 'font-family,text-decoration,padding-left,color,'
-                . 'background-color,text-align',
-                'HTML.FlashAllowFullScreen' => true,
-                'HTML.SafeObject' => true,
-                'HTML.SafeEmbed' => true,
-                'HTML.Trusted' => true,
-                'Output.FlashCompat' => true,
-                'Attr.AllowedFrameTargets' => array('_blank', '_self', '_parent', '_top')
-            )
-        );
+        $saved = $this->config->get('module_filter_filters', array());
+        return array_replace_recursive($filters, $saved);
     }
 
     /**
@@ -233,6 +190,7 @@ class Filter extends Module
     public function hookModuleUninstallAfter()
     {
         $this->getLibrary()->clearCache();
+        $this->config->reset('module_filter_filters');
     }
 
 }
