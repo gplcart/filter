@@ -2,3 +2,4 @@
 nbproject
 *sublime*
 .git
+vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer/*
