@@ -9,7 +9,8 @@
 
 namespace gplcart\modules\filter;
 
-use gplcart\core\Module;
+use gplcart\core\Module,
+    gplcart\core\Config;
 
 /**
  * Main class for Filter module
@@ -26,9 +27,9 @@ class Filter extends Module
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct(Config $config)
     {
-        parent::__construct();
+        parent::__construct($config);
     }
 
     /**
