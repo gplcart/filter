@@ -101,6 +101,48 @@ class Filter extends Module
     }
 
     /**
+     * Implements hook "filter.handlers"
+     * @param mixed $filters
+     */
+    public function hookFilterHandlers(array &$filters)
+    {
+        $filters = array_merge($filters, $this->getFilterHandlers());
+    }
+
+    /**
+     * Implements hook "module.enable.after"
+     */
+    public function hookModuleEnableAfter()
+    {
+        $this->getLibrary()->clearCache();
+    }
+
+    /**
+     * Implements hook "module.disable.after"
+     */
+    public function hookModuleDisableAfter()
+    {
+        $this->getLibrary()->clearCache();
+    }
+
+    /**
+     * Implements hook "module.install.after"
+     */
+    public function hookModuleInstallAfter()
+    {
+        $this->getLibrary()->clearCache();
+    }
+
+    /**
+     * Implements hook "module.uninstall.after"
+     */
+    public function hookModuleUninstallAfter()
+    {
+        $this->getLibrary()->clearCache();
+        $this->deleteModuleSettings('filter');
+    }
+
+    /**
      * Filter a string
      * @param string $text
      * @param array $filter
@@ -137,61 +179,14 @@ class Filter extends Module
     }
 
     /**
-     * Implements hook "filter.handlers"
-     * @param mixed $filters
-     */
-    public function hookFilterHandlers(array &$filters)
-    {
-        $filters = array_merge($filters, $this->getFilterHandlers());
-    }
-
-    /**
      * Returns an array of filter handlers
      * @return array
      */
     protected function getFilterHandlers()
     {
-        static $filters = null;
-
-        if (!isset($filters)) {
-            $filters = require __DIR__ . '/config/filters.php';
-        }
-
+        $filters = gplcart_config_get(__DIR__ . '/config/filters.php');
         $saved = $this->config->get('module_filter_filters', array());
         return array_replace_recursive($filters, $saved);
-    }
-
-    /**
-     * Implements hook "module.enable.after"
-     */
-    public function hookModuleEnableAfter()
-    {
-        $this->getLibrary()->clearCache();
-    }
-
-    /**
-     * Implements hook "module.disable.after"
-     */
-    public function hookModuleDisableAfter()
-    {
-        $this->getLibrary()->clearCache();
-    }
-
-    /**
-     * Implements hook "module.install.after"
-     */
-    public function hookModuleInstallAfter()
-    {
-        $this->getLibrary()->clearCache();
-    }
-
-    /**
-     * Implements hook "module.uninstall.after"
-     */
-    public function hookModuleUninstallAfter()
-    {
-        $this->getLibrary()->clearCache();
-        $this->config->reset('module_filter_filters');
     }
 
 }
