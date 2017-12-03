@@ -139,7 +139,12 @@ class Filter extends Module
     public function hookModuleUninstallAfter()
     {
         $this->getLibrary()->clearCache();
-        $this->deleteModuleSettings('filter');
+
+        foreach (array_keys($this->config->select()) as $key) {
+            if (strpos($key, 'module_filter_') === 0) {
+                $this->config->reset($key);
+            }
+        }
     }
 
     /**
