@@ -9,13 +9,13 @@
 
 namespace gplcart\modules\filter;
 
-use gplcart\core\Module,
+use gplcart\core\Library,
     gplcart\core\Config;
 
 /**
  * Main class for Filter module
  */
-class Filter extends Module
+class Filter
 {
 
     /**
@@ -25,11 +25,25 @@ class Filter extends Module
     protected $htmlpurifiers = array();
 
     /**
-     * Constructor
+     * Config class instance
+     * @var \gplcart\core\Config $config
      */
-    public function __construct(Config $config)
+    protected $config;
+
+    /**
+     * Library class instance
+     * @var \gplcart\core\Library $library
+     */
+    protected $library;
+
+    /**
+     * @param Config $config
+     * @param Library $library
+     */
+    public function __construct(Config $config, Library $library)
     {
-        parent::__construct($config);
+        $this->config = $config;
+        $this->library = $library;
     }
 
     /**
@@ -114,7 +128,7 @@ class Filter extends Module
      */
     public function hookModuleEnableAfter()
     {
-        $this->getLibrary()->clearCache();
+        $this->library->clearCache();
     }
 
     /**
@@ -122,7 +136,7 @@ class Filter extends Module
      */
     public function hookModuleDisableAfter()
     {
-        $this->getLibrary()->clearCache();
+        $this->library->clearCache();
     }
 
     /**
@@ -130,7 +144,7 @@ class Filter extends Module
      */
     public function hookModuleInstallAfter()
     {
-        $this->getLibrary()->clearCache();
+        $this->library->clearCache();
     }
 
     /**
@@ -138,7 +152,7 @@ class Filter extends Module
      */
     public function hookModuleUninstallAfter()
     {
-        $this->getLibrary()->clearCache();
+        $this->library->clearCache();
 
         foreach (array_keys($this->config->select()) as $key) {
             if (strpos($key, 'module_filter_') === 0) {
@@ -172,7 +186,7 @@ class Filter extends Module
             return $this->htmlpurifiers[$key];
         }
 
-        $this->getLibrary()->load('htmlpurifier');
+        $this->library->load('htmlpurifier');
 
         if (empty($filter['data'])) {
             $config = \HTMLPurifier_Config::createDefault();
