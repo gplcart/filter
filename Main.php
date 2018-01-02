@@ -15,7 +15,7 @@ use gplcart\core\Library,
 /**
  * Main class for Filter module
  */
-class Module
+class Main
 {
 
     /**
