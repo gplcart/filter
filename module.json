@@ -1,9 +1,9 @@
 {
-    "name": "Filter",
-    "version": "1.0.0-dev",
-    "description": "Provides advanced HTML filters. Based on HTML Purifier library",
-    "author": "Iurii Makukh ",
-    "core": "1.x",
-    "license": "GPL-3.0+",
-    "configure": "admin/module/settings/filter"
+  "name": "Filter",
+  "version": "1.0.0-dev",
+  "description": "Provides advanced HTML filters. Based on HTML Purifier library",
+  "author": "Iurii Makukh ",
+  "core": "1.x",
+  "license": "GPL-3.0+",
+  "configure": "admin/module/settings/filter"
 }
