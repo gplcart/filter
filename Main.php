@@ -9,8 +9,8 @@
 
 namespace gplcart\modules\filter;
 
-use gplcart\core\Library,
-    gplcart\core\Config;
+use gplcart\core\Config;
+use gplcart\core\Library;
 
 /**
  * Main class for Filter module
@@ -53,8 +53,8 @@ class Main
     public function hookLibraryList(array &$libraries)
     {
         $libraries['htmlpurifier'] = array(
-            'name' => /* @text */'HTML Purifier',
-            'description' => /* @text */'Standards compliant HTML filter written in PHP',
+            'name' => 'HTML Purifier', // @text
+            'description' => 'Standards compliant HTML filter written in PHP', // @text
             'type' => 'php',
             'module' => 'filter',
             'url' => 'https://github.com/ezyang/htmlpurifier',
@@ -97,8 +97,8 @@ class Main
      */
     public function hookUserRolePermissions(array &$permissions)
     {
-        $permissions['module_filter_edit'] = /* @text */'HTML Filter: edit';
-        $permissions['module_filter_delete'] = /* @text */'HTML Filter: delete';
+        $permissions['module_filter_edit'] = 'HTML Filter: edit'; // @text
+        $permissions['module_filter_delete'] = 'HTML Filter: delete'; // @text
     }
 
     /**
