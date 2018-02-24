@@ -9,13 +9,13 @@
 
 namespace gplcart\modules\filter\controllers;
 
-use gplcart\core\models\UserRole as UserRoleModel;
-use gplcart\core\controllers\backend\Controller as BackendController;
+use gplcart\core\controllers\backend\Controller;
+use gplcart\core\models\UserRole;
 
 /**
  * Handles incoming requests and outputs data related to Filter module
  */
-class Filter extends BackendController
+class Filter extends Controller
 {
 
     /**
@@ -31,9 +31,10 @@ class Filter extends BackendController
     protected $data_filter;
 
     /**
-     * @param UserRoleModel $role
+     * Filter constructor.
+     * @param UserRole $role
      */
-    public function __construct(UserRoleModel $role)
+    public function __construct(UserRole $role)
     {
         parent::__construct();
 
@@ -112,6 +113,7 @@ class Filter extends BackendController
             }
 
             $names = array();
+
             foreach ($filter['role_id'] as $role_id) {
                 if (isset($roles[$role_id]['name'])) {
                     $names[] = $roles[$role_id]['name'];
@@ -163,6 +165,7 @@ class Filter extends BackendController
     protected function setFilterFilter($filter_id)
     {
         $this->data_filter = $this->filter->get($filter_id);
+
         if (empty($this->data_filter['module']) || $this->data_filter['module'] !== 'filter') {
             $this->setHttpStatus(404);
         }

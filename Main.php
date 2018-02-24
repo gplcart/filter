@@ -9,8 +9,12 @@
 
 namespace gplcart\modules\filter;
 
+use Exception;
 use gplcart\core\Config;
 use gplcart\core\Library;
+use HTMLPurifier;
+use HTMLPurifier_Config;
+use LogicException;
 
 /**
  * Main class for Filter module
@@ -110,7 +114,11 @@ class Main
     public function hookFilter($text, $filter, &$filtered)
     {
         if (isset($filter['module']) && $filter['module'] === 'filter' && !empty($filter['status'])) {
-            $filtered = $this->filter($text, $filter);
+            try {
+                $filtered = $this->filter($text, $filter);
+            } catch (Exception $ex) {
+                //
+            }
         }
     }
 
@@ -120,7 +128,7 @@ class Main
      */
     public function hookFilterHandlers(array &$filters)
     {
-        $filters = array_merge($filters, $this->getFilterHandlers());
+        $filters = array_merge($filters, $this->getHandlers());
     }
 
     /**
@@ -175,7 +183,8 @@ class Main
     /**
      * Returns HTML Purifier class instance depending on the filter configuration
      * @param array $filter
-     * @return \HTMLPurifier
+     * @return HTMLPurifier
+     * @throws LogicException
      */
     public function getHtmlpurifierInstance(array $filter)
     {
@@ -188,20 +197,24 @@ class Main
 
         $this->library->load('htmlpurifier');
 
-        if (empty($filter['data'])) {
-            $config = \HTMLPurifier_Config::createDefault();
-        } else {
-            $config = \HTMLPurifier_Config::create($filter['data']);
+        if (!class_exists('HTMLPurifier')) {
+            throw new LogicException('Class HTMLPurifier not found');
         }
 
-        return $this->htmlpurifiers[$key] = new \HTMLPurifier($config);
+        if (empty($filter['data'])) {
+            $config = HTMLPurifier_Config::createDefault();
+        } else {
+            $config = HTMLPurifier_Config::create($filter['data']);
+        }
+
+        return $this->htmlpurifiers[$key] = new HTMLPurifier($config);
     }
 
     /**
      * Returns an array of filter handlers
      * @return array
      */
-    protected function getFilterHandlers()
+    public function getHandlers()
     {
         $filters = gplcart_config_get(__DIR__ . '/config/filters.php');
         $saved = $this->config->get('module_filter_filters', array());
