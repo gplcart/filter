@@ -63,13 +63,10 @@ class Main
             'module' => 'filter',
             'url' => 'https://github.com/ezyang/htmlpurifier',
             'download' => 'https://github.com/ezyang/htmlpurifier/archive/v4.9.2.zip',
-            'version_source' => array(
-                'lines' => 100,
-                'file' => 'vendor/ezyang/htmlpurifier/library/HTMLPurifier.php',
-                'pattern' => '/.*VERSION.*(\\d+\\.+\\d+\\.+\\d+)/'
-            ),
+            'version' => '4.9.2',
+            'vendor' => 'ezyang/htmlpurifier',
             'files' => array(
-                'vendor/ezyang/htmlpurifier/library/HTMLPurifier.auto.php'
+                'library/HTMLPurifier.auto.php'
             ),
         );
     }
@@ -113,11 +110,11 @@ class Main
      */
     public function hookFilter($text, $filter, &$filtered)
     {
-        if (isset($filter['module']) && $filter['module'] === 'filter' && !empty($filter['status'])) {
+        if (!isset($filtered) && isset($filter['module']) && $filter['module'] === 'filter' && !empty($filter['status'])) {
             try {
                 $filtered = $this->filter($text, $filter);
             } catch (Exception $ex) {
-                //
+                $filtered = '** filter error **';
             }
         }
     }
@@ -177,7 +174,7 @@ class Main
      */
     public function filter($text, $filter)
     {
-        return $this->getHtmlpurifierInstance($filter)->purify($text);
+        return $this->getPurifier($filter)->purify($text);
     }
 
     /**
@@ -186,7 +183,7 @@ class Main
      * @return HTMLPurifier
      * @throws LogicException
      */
-    public function getHtmlpurifierInstance(array $filter)
+    public function getPurifier(array $filter)
     {
         ksort($filter['data']);
         $key = md5(json_encode($filter['data']));
