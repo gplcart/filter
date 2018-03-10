@@ -129,36 +129,10 @@ class Main
     }
 
     /**
-     * Implements hook "module.enable.after"
-     */
-    public function hookModuleEnableAfter()
-    {
-        $this->library->clearCache();
-    }
-
-    /**
-     * Implements hook "module.disable.after"
-     */
-    public function hookModuleDisableAfter()
-    {
-        $this->library->clearCache();
-    }
-
-    /**
-     * Implements hook "module.install.after"
-     */
-    public function hookModuleInstallAfter()
-    {
-        $this->library->clearCache();
-    }
-
-    /**
      * Implements hook "module.uninstall.after"
      */
     public function hookModuleUninstallAfter()
     {
-        $this->library->clearCache();
-
         foreach (array_keys($this->config->select()) as $key) {
             if (strpos($key, 'module_filter_') === 0) {
                 $this->config->reset($key);
@@ -215,6 +189,7 @@ class Main
     {
         $filters = gplcart_config_get(__DIR__ . '/config/filters.php');
         $saved = $this->config->get('module_filter_filters', array());
+
         return array_replace_recursive($filters, $saved);
     }
 
